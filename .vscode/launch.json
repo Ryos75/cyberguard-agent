@@ -1,0 +1,191 @@
+"""Gera os documentos fictícios de Segurança da Informação da TechCorp."""
+import os, json, csv
+os.makedirs("docs", exist_ok=True)
+
+from fpdf import FPDF
+texto_pdf = """POLITICA DE SEGURANCA DA INFORMACAO (PSI) - TECHCORP
+Versao 5.1 | Vigencia: 01/01/2025 | Classificacao: Interna
+
+1. OBJETIVO
+Estabelecer diretrizes de seguranca da informacao para todos os
+colaboradores, prestadores e parceiros da TechCorp Tecnologia Ltda.
+
+2. CLASSIFICACAO DA INFORMACAO
+- PUBLICA: pode ser divulgada livremente (ex: material de marketing).
+- INTERNA: uso interno, sem dano grave se vazada (ex: comunicados).
+- CONFIDENCIAL: dano significativo se vazada (ex: contratos, dados
+  de clientes). Requer criptografia em transito e em repouso.
+- RESTRITA: dano severo (ex: credenciais, dados financeiros, codigo-fonte
+  de produtos). Acesso somente com aprovacao do gestor + CISO.
+
+3. AUTENTICACAO
+- MFA (autenticacao multifator) e OBRIGATORIO em todos os sistemas
+  corporativos, sem excecoes.
+- Detalhes de senhas: consultar o Manual de Senhas e MFA.
+
+4. CONTROLE DE ACESSO
+- Principio do menor privilegio: cada colaborador acessa apenas o
+  necessario para sua funcao.
+- Revisao de acessos: trimestral, conduzida pelos gestores.
+- Desligamento: acessos revogados em ate 4 horas apos o desligamento.
+
+5. EQUIPE DE SEGURANCA (SOC)
+- E-mail: soc@techcorp.com | Ramal: 4500 (24x7)
+- CISO: Ricardo Tavares | security@techcorp.com
+- Reporte de incidentes: IMEDIATO, em ate 15 minutos apos a suspeita.
+
+6. USO ACEITAVEL
+- Proibido instalar software nao homologado (shadow IT).
+- Proibido usar e-mail corporativo em servicos pessoais.
+- Dispositivos USB: somente os criptografados e fornecidos pela empresa.
+
+7. BACKUPS
+- Dados corporativos: backup diario automatico, retencao de 90 dias.
+- Testes de restauracao: mensais, responsabilidade da equipe de TI.
+
+8. SANCOES
+Descumprimento sujeita o colaborador a advertencia, suspensao ou
+desligamento por justa causa, conforme gravidade.
+
+9. TREINAMENTO
+Treinamento de conscientizacao: obrigatorio no onboarding e reciclagem
+anual. Simulacoes de phishing: trimestrais."""
+pdf = FPDF(); pdf.add_page(); pdf.set_font("Helvetica", size=11)
+pdf.multi_cell(0, 6, texto_pdf); pdf.output("docs/politica_seguranca.pdf")
+print("OK politica_seguranca.pdf")
+
+from docx import Document
+doc = Document()
+doc.add_heading("MANUAL DE SENHAS E MFA - TECHCORP", 0)
+doc.add_paragraph("Documento: SEC-MAN-002 | Revisao: 3 | Aprovado por: CISO Ricardo Tavares")
+for t, x in [
+ ("1. REGRAS DE SENHA","Minimo de 12 caracteres, combinando letras maiusculas, minusculas, numeros e simbolos. Troca obrigatoria a cada 180 dias. E proibido reutilizar qualquer uma das ultimas 5 senhas. Senhas nao podem conter nome, data de nascimento ou o nome da empresa."),
+ ("2. GERENCIADOR DE SENHAS","O gerenciador oficial e homologado da TechCorp e o Bitwarden (licenca corporativa). E PROIBIDO salvar senhas em planilhas, blocos de notas, post-its ou no navegador."),
+ ("3. MFA - AUTENTICACAO MULTIFATOR","Obrigatorio em todos os sistemas. Metodo padrao: aplicativo Microsoft Authenticator. SMS so e permitido como metodo de backup. Nunca aprove uma notificacao de MFA que voce nao solicitou - isso e sinal de ataque (MFA fatigue). Se ocorrer, troque a senha imediatamente e avise o SOC no ramal 4500."),
+ ("4. COMPARTILHAMENTO","Senhas sao pessoais e intransferiveis. NINGUEM da TI ou da diretoria jamais pedira sua senha, por nenhum canal. Compartilhamento de senha e violacao grave da PSI."),
+ ("5. SENHAS COMPROMETIDAS","Se suspeitar que sua senha vazou: 1) troque imediatamente; 2) avise o SOC (soc@techcorp.com / ramal 4500); 3) verifique atividades recentes na conta. Prazo para reporte: 15 minutos."),
+]:
+    doc.add_heading(t, level=2); doc.add_paragraph(x)
+doc.save("docs/manual_senhas_mfa.docx"); print("OK manual_senhas_mfa.docx")
+
+from openpyxl import Workbook
+wb = Workbook(); ws = wb.active; ws.title = "Ativos Criticos"
+ws.append(["ID","Ativo","Tipo","Criticidade","Dono","RTO","RPO","Backup","Exposto Internet"])
+for l in [
+ ["AT-001","ERP Financeiro","Sistema","Critica","Carlos Mendes","4 horas","1 hora","Diario","Nao"],
+ ["AT-002","VPN Corporativa","Infraestrutura","Critica","Equipe TI","2 horas","N/A","Config semanal","Sim"],
+ ["AT-003","E-mail (M365)","Sistema","Critica","Equipe TI","6 horas","30 min","Nativo M365","Sim"],
+ ["AT-004","CRM Vendas","Sistema","Alta","Fernanda Rocha","8 horas","4 horas","Diario","Sim"],
+ ["AT-005","Servidor de Arquivos","Infraestrutura","Alta","Equipe TI","12 horas","12 horas","Diario","Nao"],
+ ["AT-006","Site Institucional","Sistema","Media","Marketing","24 horas","24 horas","Semanal","Sim"],
+ ["AT-007","Repositorio de Codigo (GitLab)","Sistema","Critica","Ana Paula Silva","4 horas","1 hora","Diario","Nao"],
+ ["AT-008","Wi-Fi Corporativo","Infraestrutura","Media","Equipe TI","8 horas","N/A","Config semanal","Nao"],
+]: ws.append(l)
+wb.save("docs/inventario_ativos.xlsx"); print("OK inventario_ativos.xlsx")
+
+from pptx import Presentation
+prs = Presentation(); layout = prs.slide_layouts[1]
+for t, c in [
+ ("Treinamento Anti-Phishing TechCorp 2025","Obrigatorio para todos os colaboradores\nReciclagem anual + simulacoes trimestrais"),
+ ("O que e Phishing?","Golpe que usa e-mails, SMS ou ligacoes falsas para roubar credenciais, dados ou instalar malware.\n91% dos ciberataques comecam com um e-mail de phishing."),
+ ("Os 7 Sinais de um E-mail de Phishing","1. Senso de urgencia exagerado\n2. Remetente estranho ou dominio parecido (techc0rp.com)\n3. Erros de portugues ou formatacao\n4. Links que nao batem com o texto\n5. Anexos inesperados (.zip, .exe, .html)\n6. Pedido de dados sensiveis ou senha\n7. Ofertas boas demais para ser verdade"),
+ ("Recebeu um e-mail suspeito?","NAO clique em links nem abra anexos.\nUse o botao 'Reportar Phishing' no Outlook.\nNa duvida, encaminhe para soc@techcorp.com ou ligue no ramal 4500."),
+ ("Clicou sem querer?","Acontece! O importante e agir rapido:\n1. NAO desligue o computador\n2. Desconecte o cabo de rede / Wi-Fi\n3. Avise o SOC IMEDIATAMENTE (ramal 4500) - prazo: 15 minutos\n4. Nao tente resolver sozinho\nReportar rapido NUNCA gera punicao. Esconder o incidente, sim."),
+ ("Simulacoes Trimestrais","A TechCorp envia e-mails de phishing SIMULADOS a cada trimestre.\nQuem clicar recebe orientacao na hora (sem punicao).\nQuem clicar 2 vezes no mesmo ano refaz o treinamento completo."),
+ ("Certificacao","Quiz na plataforma UniTechCorp.\nNota minima: 85%.\nCertificado valido por 12 meses."),
+]:
+    s = prs.slides.add_slide(layout); s.shapes.title.text = t; s.placeholders[1].text = c
+prs.save("docs/treinamento_phishing.pptx"); print("OK treinamento_phishing.pptx")
+
+with open("docs/politica_home_office.md","w",encoding="utf-8") as f:
+    f.write("""# Politica de Seguranca no Trabalho Remoto - TechCorp
+> Versao 2.4 - Aprovada pelo CISO em 10/01/2025
+
+## 1. VPN Obrigatoria
+- Todo acesso a sistemas corporativos fora do escritorio DEVE usar a VPN.
+- A VPN desconecta apos 12 horas; reconecte ao iniciar o expediente.
+- Problemas com VPN: chamado no helpdesk ou ramal 4400.
+
+## 2. Redes Wi-Fi
+- Proibido usar Wi-Fi publico (cafes, aeroportos, hoteis) sem VPN ativa.
+- Rede domestica: troque a senha padrao do roteador e use WPA2 ou WPA3.
+- Nunca compartilhe a rede do trabalho com visitas em casa.
+
+## 3. Equipamentos
+- Use SOMENTE o notebook corporativo para trabalho.
+- Proibido conectar dispositivos pessoais (pendrive, HD externo) ao equipamento corporativo.
+- Bloqueie a tela SEMPRE que se afastar: tecle Win + L.
+- Familiares nao devem usar o equipamento corporativo.
+
+## 4. Ambiente Fisico
+- Evite trabalhar com dados confidenciais em locais publicos.
+- Use pelicula de privacidade em viagens (solicite ao TI).
+- Reunioes sensiveis: use fone de ouvido.
+
+## 5. Videoconferencias
+- Nao compartilhe links de reuniao em redes sociais.
+- Ative a sala de espera para reunioes com externos.
+- Cuidado com o que aparece ao compartilhar a tela.
+
+## 6. Perda ou Roubo de Equipamento
+- Comunique o SOC IMEDIATAMENTE: soc@techcorp.com ou ramal 4500 (24x7).
+- O bloqueio e a limpeza remota do equipamento ocorrem em ate 2 horas.
+- Registre boletim de ocorrencia e envie ao RH em ate 48 horas.
+""")
+print("OK politica_home_office.md")
+
+with open("docs/historico_incidentes.csv","w",newline="",encoding="utf-8") as f:
+    csv.writer(f).writerows([
+     ["id","data","tipo","severidade","descricao","causa_raiz","licao_aprendida","status"],
+     ["INC-2024-012","05/02/2024","Malware","Media","Notebook com adware apos download de software nao homologado","Shadow IT","Reforco da politica de software homologado","Encerrado"],
+     ["INC-2024-031","18/04/2024","Phishing","Alta","Colaborador inseriu credenciais em pagina falsa do M365; conta comprometida enviou 200 e-mails","E-mail de phishing com dominio parecido","MFA bloqueou acesso externo; campanha de conscientizacao extra","Encerrado"],
+     ["INC-2024-045","22/06/2024","Midia removivel","Media","Pendrive pessoal infectado conectado a notebook corporativo","Violacao da politica de USB","Bloqueio tecnico de portas USB para midias nao criptografadas","Encerrado"],
+     ["INC-2024-058","10/08/2024","Perda de equipamento","Alta","Notebook esquecido em taxi durante viagem","Descuido fisico","Limpeza remota executada em 40 min; sem vazamento confirmado","Encerrado"],
+     ["INC-2024-071","03/10/2024","MFA Fatigue","Alta","Colaborador aprovou notificacao MFA nao solicitada de madrugada","Ataque de MFA fatigue apos vazamento de senha","Migracao de SMS para app authenticator; alerta sobre aprovacoes indevidas","Encerrado"],
+     ["INC-2024-089","27/11/2024","Engenharia social","Media","Ligacao se passando pela TI pedindo senha; colaborador reportou sem fornecer","Vishing","Caso usado como exemplo positivo no treinamento","Encerrado"],
+     ["INC-2025-003","15/01/2025","Phishing","Baixa","E-mail de phishing reportado por 14 colaboradores em 10 minutos","Campanha externa em massa","Tempo de reporte recorde; bloqueio do remetente em 8 min","Encerrado"],
+    ])
+print("OK historico_incidentes.csv")
+
+with open("docs/glossario_seguranca.json","w",encoding="utf-8") as f:
+    json.dump({"glossario":[
+     {"termo":"Phishing","definicao":"Golpe por e-mail, SMS ou ligacao que imita fontes confiaveis para roubar credenciais ou instalar malware. Na TechCorp, reporte pelo botao 'Reportar Phishing' no Outlook ou ao SOC (ramal 4500)."},
+     {"termo":"Ransomware","definicao":"Malware que criptografa arquivos e exige resgate. A TechCorp mantem backups diarios com retencao de 90 dias como protecao."},
+     {"termo":"MFA","definicao":"Autenticacao multifator: exige um segundo fator alem da senha. Obrigatorio em todos os sistemas da TechCorp. Metodo padrao: Microsoft Authenticator."},
+     {"termo":"MFA Fatigue","definicao":"Ataque em que o criminoso dispara varias notificacoes de MFA esperando que a vitima aprove por cansaco. Nunca aprove notificacoes que voce nao solicitou."},
+     {"termo":"VPN","definicao":"Rede privada virtual que criptografa a conexao. Obrigatoria para qualquer acesso remoto a sistemas da TechCorp."},
+     {"termo":"Engenharia Social","definicao":"Manipulacao psicologica para obter informacoes ou acessos. Inclui phishing (e-mail), vishing (ligacao) e smishing (SMS)."},
+     {"termo":"Shadow IT","definicao":"Uso de softwares ou servicos nao homologados pela TI. Proibido na TechCorp por criar riscos invisiveis de seguranca."},
+     {"termo":"Zero Trust","definicao":"Modelo de seguranca que nao confia em nada por padrao: toda conexao e verificada, independentemente de estar dentro da rede."},
+     {"termo":"BYOD","definicao":"Bring Your Own Device (uso de dispositivo pessoal). Na TechCorp, dispositivos pessoais NAO podem acessar a rede corporativa nem ser conectados a equipamentos da empresa."},
+     {"termo":"SOC","definicao":"Security Operations Center: equipe que monitora e responde a incidentes 24x7. Contato: soc@techcorp.com ou ramal 4500."},
+     {"termo":"RTO","definicao":"Recovery Time Objective: tempo maximo aceitavel para restaurar um sistema apos falha. Ex.: a VPN da TechCorp tem RTO de 2 horas."},
+     {"termo":"Vishing","definicao":"Phishing por voz (ligacao telefonica). Lembre-se: NINGUEM da TI da TechCorp pede senha por telefone, jamais."},
+    ]}, f, ensure_ascii=False, indent=2)
+print("OK glossario_seguranca.json")
+
+with open("docs/faq_incidentes.html","w",encoding="utf-8") as f:
+    f.write("""<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><title>FAQ Seguranca TechCorp</title></head>
+<body><h1>FAQ de Resposta a Incidentes - "O que fazer se..."</h1>
+<h2>1. Cliquei em um link suspeito. E agora?</h2>
+<p>NAO desligue o computador (isso destroi evidencias). Desconecte o cabo de rede ou o Wi-Fi e avise o SOC IMEDIATAMENTE: soc@techcorp.com ou ramal 4500. Prazo para reporte: 15 minutos. Reportar rapido nunca gera punicao.</p>
+<h2>2. Digitei minha senha em um site falso.</h2>
+<p>Troque a senha imediatamente em todos os sistemas onde ela e usada, avise o SOC (ramal 4500) e fique atento a notificacoes de MFA nao solicitadas - nao as aprove.</p>
+<h2>3. Perdi meu notebook / fui roubado.</h2>
+<p>Comunique o SOC imediatamente (24x7): soc@techcorp.com ou ramal 4500. O bloqueio e a limpeza remota ocorrem em ate 2 horas. Depois, registre boletim de ocorrencia e envie ao RH em ate 48 horas.</p>
+<h2>4. Recebi uma ligacao da "TI" pedindo minha senha.</h2>
+<p>E golpe (vishing). NINGUEM da TI ou diretoria pede senha, por nenhum canal. Nao forneca, anote o numero e reporte ao SOC.</p>
+<h2>5. Recebi uma notificacao de MFA que eu nao solicitei.</h2>
+<p>NAO aprove. Isso indica que alguem tem sua senha (ataque de MFA fatigue). Troque a senha imediatamente e avise o SOC no ramal 4500.</p>
+<h2>6. Encontrei um pendrive no estacionamento.</h2>
+<p>NAO conecte em nenhum equipamento - e uma tecnica classica de ataque (baiting). Entregue ao SOC sem conectar.</p>
+<h2>7. Meu computador esta lento e com pop-ups estranhos.</h2>
+<p>Pode ser malware. Desconecte da rede, nao desligue e abra chamado urgente com o SOC (ramal 4500).</p>
+<h2>8. Enviei um e-mail com dados confidenciais para a pessoa errada.</h2>
+<p>Isso e um incidente de vazamento de dados. Avise o SOC imediatamente e, se envolver dados pessoais, o SOC acionara o DPO. Nao tente "resolver" pedindo para o destinatario apagar.</p>
+<h2>9. Quero instalar um programa que nao esta na loja corporativa.</h2>
+<p>Nao instale (shadow IT e proibido). Solicite homologacao pelo helpdesk - prazo medio de avaliacao: 5 dias uteis.</p>
+</body></html>""")
+print("OK faq_incidentes.html")
+print("\nTODOS OS 8 DOCUMENTOS GERADOS!")

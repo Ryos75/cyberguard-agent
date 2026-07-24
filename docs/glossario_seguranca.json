@@ -1,0 +1,52 @@
+{
+  "glossario": [
+    {
+      "termo": "Phishing",
+      "definicao": "Golpe por e-mail, SMS ou ligação que imita fontes confiáveis para roubar credenciais ou instalar malware. Na TechCorp, reporte pelo botão 'Reportar Phishing' no Outlook ou ao SOC (ramal 4500)."
+    },
+    {
+      "termo": "Ransomware",
+      "definicao": "Malware que criptografa arquivos e exige resgate. A TechCorp mantém backups diários com retenção de 90 dias como proteção."
+    },
+    {
+      "termo": "MFA",
+      "definicao": "Autenticação multifator: exige um segundo fator além da senha. Obrigatório em todos os sistemas da TechCorp. Método padrão: Microsoft Authenticator."
+    },
+    {
+      "termo": "MFA Fatigue",
+      "definicao": "Ataque em que o criminoso dispara várias notificações de MFA esperando que a vítima aprove por cansaço. Nunca aprove notificações que você não solicitou."
+    },
+    {
+      "termo": "VPN",
+      "definicao": "Rede privada virtual que criptografa a conexão. Obrigatória para qualquer acesso remoto a sistemas da TechCorp."
+    },
+    {
+      "termo": "Engenharia Social",
+      "definicao": "Manipulação psicológica para obter informações ou acessos. Inclui phishing (e-mail), vishing (ligação) e smishing (SMS)."
+    },
+    {
+      "termo": "Shadow IT",
+      "definicao": "Uso de softwares ou serviços não homologados pela TI. Proibido na TechCorp por criar riscos invisíveis de segurança."
+    },
+    {
+      "termo": "Zero Trust",
+      "definicao": "Modelo de segurança que não confia em nada por padrão: toda conexão é verificada, independentemente de estar dentro da rede."
+    },
+    {
+      "termo": "BYOD",
+      "definicao": "Bring Your Own Device (uso de dispositivo pessoal). Na TechCorp, dispositivos pessoais NÃO podem acessar a rede corporativa nem ser conectados a equipamentos da empresa."
+    },
+    {
+      "termo": "SOC",
+      "definicao": "Security Operations Center: equipe que monitora e responde a incidentes 24x7. Contato: soc@techcorp.com ou ramal 4500."
+    },
+    {
+      "termo": "RTO",
+      "definicao": "Recovery Time Objective: tempo máximo aceitável para restaurar um sistema após falha. Ex.: a VPN da TechCorp tem RTO de 2 horas."
+    },
+    {
+      "termo": "Vishing",
+      "definicao": "Phishing por voz (ligação telefônica). Lembre-se: NINGUÉM da TI da TechCorp pede senha por telefone, jamais."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+id,data,tipo,severidade,descricao,causa_raiz,licao_aprendida,status
+INC-2024-012,05/02/2024,Malware,Média,Notebook com adware após download de software não homologado,Shadow IT,Reforço da política de software homologado,Encerrado
+INC-2024-031,18/04/2024,Phishing,Alta,Colaborador inseriu credenciais em página falsa do M365; conta comprometida enviou 200 e-mails,E-mail de phishing com domínio parecido,MFA bloqueou acesso externo; campanha de conscientização extra,Encerrado
+INC-2024-045,22/06/2024,Mídia removível,Média,Pendrive pessoal infectado conectado a notebook corporativo,Violação da política de USB,Bloqueio técnico de portas USB para mídias não criptografadas,Encerrado
+INC-2024-058,10/08/2024,Perda de equipamento,Alta,Notebook esquecido em táxi durante viagem,Descuido físico,Limpeza remota executada em 40 min; sem vazamento confirmado,Encerrado
+INC-2024-071,03/10/2024,MFA Fatigue,Alta,Colaborador aprovou notificação MFA não solicitada de madrugada,Ataque de MFA fatigue após vazamento de senha,Migração de SMS para app authenticator; alerta sobre aprovações indevidas,Encerrado
+INC-2024-089,27/11/2024,Engenharia social,Média,Ligação se passando pela TI pedindo senha; colaborador reportou sem fornecer,Vishing,Caso usado como exemplo positivo no treinamento,Encerrado
+INC-2025-003,15/01/2025,Phishing,Baixa,E-mail de phishing reportado por 14 colaboradores em 10 minutos,Campanha externa em massa,Tempo de reporte recorde; bloqueio do remetente em 8 min,Encerrado
