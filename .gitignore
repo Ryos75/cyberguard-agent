@@ -6,3 +6,5 @@ __pycache__/
 .vscode/
 *.egg-info/
 docs.py_project/
+oci.key
+cyberguard-agent/
