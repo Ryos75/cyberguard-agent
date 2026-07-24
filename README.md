@@ -6,8 +6,19 @@ documentos internos da empresa (RAG). Desenvolvido para o desafio **Alura Agente
 
 >  **Demo rodando na nuvem (OCI):**
 >
-> ![Demo do CyberGuard](assets/demo.gif)
-> *(imagem/vídeo a ser adicionado após o deploy na Oracle Cloud)*
+
+
+https://github.com/user-attachments/assets/40752224-e7e3-4c7f-a5db-ce9103c34144
+
+
+
+
+
+
+
+
+
+
 
 ## 🎯 O que o CyberGuard faz
 
