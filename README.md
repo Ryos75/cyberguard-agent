@@ -4,7 +4,7 @@ Agente conversacional corporativo que responde dúvidas de colaboradores sobre
 **phishing, senhas, MFA, home office e resposta a incidentes**, com base em
 documentos internos da empresa (RAG). Desenvolvido para o desafio **Alura Agentes**.
 
->  **Demo rodando na nuvem (OCI):**
+> **Acesse ao vivo.**  https://agentecyberguard.duckdns.org
 >
 
 
