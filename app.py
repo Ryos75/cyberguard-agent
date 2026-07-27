@@ -15,7 +15,7 @@ with st.sidebar:
     st.header("🏢 Sobre o CyberGuard")
     st.markdown(
         "Sou o assistente virtual do time de Segurança da Informação da **TechCorp**. "
-        "Fui criado para ajudar **você, colaborador**, a adotar práticas seguras no dia a dia, "
+        " Fui criado para ajudar **você, colaborador**, a adotar práticas seguras no dia a dia, "
         "respondendo com base nas políticas e documentos internos da empresa."
     )
     st.markdown("**Posso ajudar com:**")
