@@ -4,9 +4,8 @@
 
 # 🛡️ CyberGuard — Agente de IA para Conscientização em Cibersegurança
 
-Agente conversacional corporativo que responde dúvidas de colaboradores sobre
-**phishing, senhas, MFA, home office e resposta a incidentes**, com base em
-documentos internos da empresa (RAG). Desenvolvido para o desafio **Alura Agentes**.
+**CyberGuard** é o assistente virtual de conscientização em segurança da informação da empresa fictícia **TechCorp**. 
+Ele fica disponível 24h para que **colaboradores** tirem dúvidas sobre phishing, senhas, MFA, home office e resposta a incidentes, respondendo **exclusivamente** com base nos documentos e políticas internas da empresa (RAG).
 
 > **Acesse ao vivo.**  https://agentecyberguard.duckdns.org
 >
@@ -25,13 +24,11 @@ https://github.com/user-attachments/assets/6b05e30b-5eb9-4bdd-8782-fba4ff735a55
 
 
 
-## 🎯 O que o CyberGuard faz
+## 🎯 Problema de negócio
 
-- Responde perguntas com base **exclusivamente** em documentos internos (sem alucinar).
-- Cobre **8 formatos** de arquivo: PDF, DOCX, XLSX, PPTX, MD, CSV, JSON e HTML.
-- Trata **incidentes em andamento** com urgência (orienta acionar o SOC, não desligar a máquina).
-- **Recusa** pedidos ofensivos (ex.: "criar um phishing") e indica as simulações oficiais.
-- Cita o **documento-fonte** de cada resposta.
+Segundo relatórios do setor (ex.: Verizon DBIR), a maioria das violações envolve o **fator humano**.
+Treinamentos anuais não bastam: o colaborador precisa de orientação **no momento da dúvida**.
+O CyberGuard preenche essa lacuna como um canal conversacional, centralizado e sempre disponível, reduzindo o tempo de resposta a incidentes e reforçando a cultura de segurança.
 
 ## 🏗️ Arquitetura
 
@@ -47,18 +44,16 @@ Agente RAG (LangChain) ← LLM (Gemini)
 Interface de chat (Streamlit)
 
 
-## 🧠 Domínio de conhecimento (empresa fictícia TechCorp)
+## 🧠 Decisões técnicas
 
-| Documento | Formato | Conteúdo |
-|---|---|---|
-| Política de Segurança da Informação | PDF | Classificação da informação, MFA, SOC |
-| Manual de Senhas e MFA | DOCX | Regras de senha, Bitwarden, MFA fatigue |
-| Inventário de Ativos | XLSX | Sistemas críticos, RTO/RPO |
-| Treinamento Anti-Phishing | PPTX | Os 7 sinais de phishing |
-| Política de Home Office | MD | VPN, Wi-Fi, bloqueio de tela |
-| Histórico de Incidentes | CSV | Casos anonimizados e lições aprendidas |
-| Glossário de Segurança | JSON | Phishing, ransomware, zero trust, etc. |
-| FAQ "O que fazer se..." | HTML | Resposta imediata a incidentes |
+- **RAG em vez de fine-tuning:** o conhecimento muda (políticas são revisadas). Com RAG, atualizar um documento e re-ingerir já reflete na resposta — sem retreinar modelo. Também elimina alucinação, pois o LLM só vê o contexto recuperado.
+- **ChromaDB com persistência local:** banco vetorial leve, sem serviço externo, ideal para uma VM Always Free. Os embeddings ficam em disco (`chroma_db/`), sobrevivendo a reinícios.
+- **Loaders manuais para XLSX, PPTX e JSON:** evitei a biblioteca `unstructured` (pesada e com dependências frágeis no Windows). Para XLSX, cada linha vira um documento no formato `coluna: valor`; para PPTX, cada slide vira um documento; para o glossário JSON, cada termo vira um chunk — o que **melhora** a recuperação.
+- **Chunking 1000 / overlap 200:** equilíbrio entre contexto suficiente por chunk e precisão na busca; o overlap evita cortar uma regra no meio.
+- **top-k = 5:** traz fontes suficientes para respostas cruzadas (ex.: incidente de phishing no CSV + prevenção no PPTX) sem poluir o prompt.
+- **Modelos Gemini (free tier):** embeddings `gemini-embedding-001` e chat `gemini-3.1-flash-lite`, escolhidos por custo zero e baixa latência.
+- **Streamlit como interface:** entrega um “produto” com cara real (sidebar institucional, boas-vindas, fontes citadas), não apenas um terminal — mais aderente ao uso por colaboradores leigos.
+- **OCI Always Free + systemd:** custo zero e alta disponibilidade; o serviço `cyberguard` reinicia sozinho e sobe com a VM.
 
 ## 🚀 Como rodar localmente
 
@@ -79,9 +74,16 @@ streamlit run app.py     # abre a interface em http://localhost:8501
 🛠️ Pilha
 Python · LangChain · Google Gemini · ChromaDB · Streamlit · Oracle Cloud Infrastructure (OCI)
 
-☁️ Infraestrutura
-Hospedado em VM Oracle Cloud Infrastructure (Always Free) .
-(detalhes para implantar a serem completados)
+## ☁️ Deploy na Oracle Cloud (OCI)
+
+- **Serviço OCI utilizado:** Compute Instance (VM `VM.Standard.A1.Flex`, Always Free, Ubuntu).
+- Aplicação servida por **Streamlit** atrás de serviço `systemd` (`cyberguard.service`).
+- Acesso liberado via Security List (ingress 8501) + firewall da VM.
+- *(Opcional)* HTTPS e domínio amigável via Nginx + Let’s Encrypt + DuckDNS.
+
+## 🛠️ Stack
+
+Python · LangChain · Google Gemini · ChromaDB · Streamlit · Oracle Cloud Infrastructure (OCI)
 
 ⚠️ Aviso
 Projeto educacional com documentos fictícios . O agente fornece orientação
